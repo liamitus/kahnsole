@@ -44,9 +44,6 @@ body {
 
     width: 100%;
 
-    padding: 6px;   /* Same border+padding as text area. */
-    padding-bottom: 1.15em; /* A bit more than one additional line of text. */
-
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;

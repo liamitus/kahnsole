@@ -31,7 +31,11 @@
     // Copy textarea contents; browser will calculate correct height of copy,
     // which will make overall container taller, which will make textarea taller.
     function autoSize() {
-        var text = newlinesToBreaklines(commandLine.value);
+        var userInput = readCommandLine();
+        var text = newlinesToBreaklines(userInput);
+        if (text == '') {
+            text = '<br />';
+        }
         phantomUserInput.innerHTML = text;
     }
 
@@ -70,11 +74,12 @@
 
     // ---------------------------------------------------- Command line reading
 
-    // Listen for the enter/return key being pressed.
+    // Listen for the enter/return key being pressed without the shift key.
     document.onkeydown = function(event) {
         if (event.keyCode == '13' && !event.shiftKey) {
             var userInput = readCommandLine();
             print(userInput);
+            clear();
             return false;
         }
     };
@@ -82,8 +87,13 @@
     // Read the command line, duh.
     function readCommandLine() {
         var userInput = commandLine.value;
-        log(userInput);
         return userInput;
+    }
+
+    // Clear the command line.
+    function clear() {
+        commandLine.value = '';
+        phantomUserInput.innerHTML = '';
     }
 
     // ---------------------------------------------------------- Helper methods
@@ -102,8 +112,9 @@
 
     // Prints some output to the screen.
     function print(message) {
+        log(message);
         var formatted = newlinesToBreaklines(message);
-        output.innerHTML += formatted + '<br />';
+        output.innerHTML = formatted + '<br />' + output.innerHTML;
     }
 
     function newlinesToBreaklines(text) {
