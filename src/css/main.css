@@ -1,0 +1,56 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #292838;
+
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
+#in {
+    position: relative;
+}
+
+#command-line {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: white;
+
+    overflow: hidden;
+    background: none;
+    border: none;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+#phantom-user-input {
+    visibility: hidden;
+
+    width: 100%;
+
+    padding: 6px;   /* Same border+padding as text area. */
+    padding-bottom: 1.15em; /* A bit more than one additional line of text. */
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+    font-family: Helvetica, Arial, sans-serif;
+}
