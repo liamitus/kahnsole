@@ -17,6 +17,7 @@
         output = el("out");
 
         focusOnTheCommandLine();
+        document.body.addEventListener('click', focusOnTheCommandLine, true); 
 
         bindToTypingEvents(autoSize);
 
