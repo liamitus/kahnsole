@@ -149,8 +149,7 @@
     // ---------------------------------------------------- Command line actions
 
     function printHelp() {
-        print('No help for you.',
-              'Jk help is coming soon...');
+        print('Kahnsole is a UNIX terminal in the browser.');
     }
 
     // ------------------------------------------------ Printing to command line
