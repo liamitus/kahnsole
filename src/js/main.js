@@ -79,6 +79,7 @@
     document.onkeydown = function(event) {
         if (event.keyCode == '13' && !event.shiftKey) {
             var userInput = readCommandLine();
+            processUserInput(userInput);
             print(userInput);
             clear();
             return false;
@@ -97,6 +98,25 @@
         phantomUserInput.innerHTML = '';
     }
 
+    function processUserInput(userInput) {
+        switch (userInput) {
+            case 'help':
+                printHelp();
+            break;
+            default:
+                if (userInput) {
+                    print('Command not recognized.');
+                }
+        }
+    }
+
+    // ---------------------------------------------------- Command line actions
+
+    function printHelp() {
+        print('No help for you.',
+              'Jk help is coming soon...');
+    }
+
     // ---------------------------------------------------------- Helper methods
     
     // Retrieve the element matching the given query string.
@@ -112,10 +132,13 @@
     }
 
     // Prints some output to the screen.
-    function print(message) {
-        log(message);
-        var formatted = newlinesToBreaklines(message);
-        output.innerHTML = formatted + '<br />' + output.innerHTML;
+    function print() {
+        for (var i = 0; i < arguments.length; i++) {
+            var message = arguments[i];
+            log(message);
+            var formatted = newlinesToBreaklines(message);
+            output.innerHTML = formatted + '<br />' + output.innerHTML;
+        }
     }
 
     function newlinesToBreaklines(text) {
