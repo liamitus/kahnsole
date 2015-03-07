@@ -12,7 +12,7 @@
 
 (function () {
 
-    var prompt = '> ';
+    var prompt = '>';
 
     // Specifies the command line input; never trust user input.
     var commandLine;
@@ -33,7 +33,7 @@
         focusOnTheCommandLine();
         document.body.addEventListener('click', focusOnTheCommandLine, true); 
 
-        printToCommandLine(prompt);
+        resetPrompt();
 
         bindToTypingEvents(autoSize);
 
@@ -91,17 +91,35 @@
 
     // ---------------------------------------------------- Command line reading
 
-    // Listen for the enter/return key being pressed without the shift key.
     document.onkeydown = function(event) {
+
+        var userInput = readCommandLine();
+
+        // Listen for the enter/return key being pressed without the shift key.
         if (event.keyCode == '13' && !event.shiftKey) {
-            var userInput = readCommandLine();
+
             processUserInput(userInput);
+
             print(userInput);
+
             clear();
-            printToCommandLine(prompt);
+
+            resetPrompt();
+
             return false;
         }
-    };
+
+        // Listen for the backspace/delete key being pressed.
+        if (event.keyCode == '46' || event.keyCode == '8') {
+            // Re-apply the prompt if the user deletes too much.
+            if (userInput.length <= prompt.length) {
+                clear();
+
+                resetPrompt();
+            }
+        }
+
+    }; // end document.onkeydown
 
     // Read the command line, duh.
     function readCommandLine() {
@@ -135,6 +153,20 @@
               'Jk help is coming soon...');
     }
 
+    // ------------------------------------------------ Printing to command line
+
+    // Print the given message(s) to the output.
+    function printToCommandLine() {
+        [].map.call(arguments, function (message) {
+            commandLine.value += message;
+        });
+    }
+
+    // Resets the prompt in the command line.
+    function resetPrompt() {
+        printToCommandLine(prompt + ' ');
+    }
+
     // ---------------------------------------------------------- Helper methods
 
     // Retrieve the element matching the given query string.
@@ -158,18 +190,12 @@
         });
     }
 
-    function printToCommandLine() {
-        [].map.call(arguments, function (message) {
-            commandLine.value += message;
-        });
-    }
-
     function newlinesToBreaklines(text) {
         return text.replace(/\n/g, '<br/>');
     }
 
     function removePrompt(userInput) {
-        return userInput.substring(prompt.length);
+        return userInput.substring(prompt.length + 1); // +1 for the space.
     }
 
 })();
