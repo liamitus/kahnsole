@@ -1,8 +1,22 @@
+// ----------------------------------------------------------------- Polyfill(s)
+
+// Array.prototype.map
+// Thanks to stackoverflow user Harry found at
+// http://stackoverflow.com/a/16680415/1729686
+(function(fn){
+    if (!fn.map) fn.map=function(f){var r=[];for(var i=0;i<this.length;i++)if(this[i]!==undefined)r[i]=f(this[i]);return r}
+    if (!fn.filter) fn.filter=function(f){var r=[];for(var i=0;i<this.length;i++)if(this[i]!==undefined&&f(this[i]))r[i]=this[i];return r}
+})(Array.prototype);
+
+// ------------------------------------------------------------------- Main code
+
 (function () {
+
+    var prompt = '> ';
 
     // Specifies the command line input; never trust user input.
     var commandLine;
-    
+
     // Sepcifies a hidden copy of the text a user has entered so far,
     // which is used for resizing the textarea.
     var phantomUserInput;
@@ -18,6 +32,8 @@
 
         focusOnTheCommandLine();
         document.body.addEventListener('click', focusOnTheCommandLine, true); 
+
+        printToCommandLine(prompt);
 
         bindToTypingEvents(autoSize);
 
@@ -82,6 +98,7 @@
             processUserInput(userInput);
             print(userInput);
             clear();
+            printToCommandLine(prompt);
             return false;
         }
     };
@@ -99,14 +116,15 @@
     }
 
     function processUserInput(userInput) {
-        switch (userInput) {
+        var processed = removePrompt(userInput);
+        switch (processed) {
             case 'help':
                 printHelp();
             break;
             default:
-                if (userInput) {
-                    print('Command not recognized.');
-                }
+                if (processed) {
+                print('Command not recognized.');
+            }
         }
     }
 
@@ -118,7 +136,7 @@
     }
 
     // ---------------------------------------------------------- Helper methods
-    
+
     // Retrieve the element matching the given query string.
     function el(query) {
         return document.getElementById(query) || document.querySelector(query);
@@ -133,16 +151,25 @@
 
     // Prints some output to the screen.
     function print() {
-        for (var i = 0; i < arguments.length; i++) {
-            var message = arguments[i];
+        [].map.call(arguments, function (message) {
             log(message);
             var formatted = newlinesToBreaklines(message);
             output.innerHTML = formatted + '<br />' + output.innerHTML;
-        }
+        });
+    }
+
+    function printToCommandLine() {
+        [].map.call(arguments, function (message) {
+            commandLine.value += message;
+        });
     }
 
     function newlinesToBreaklines(text) {
         return text.replace(/\n/g, '<br/>');
+    }
+
+    function removePrompt(userInput) {
+        return userInput.substring(prompt.length);
     }
 
 })();
